@@ -13,7 +13,11 @@ standard_scaler = pickle.load(open('models/scaler.pkl','rb'))
 def home():
     return render_template("home.html")
 
-@app.route("/prediction", methods=["POST"])
+@app.route("/home")
+def home_page():
+    return render_template("home.html")
+
+@app.route("/prediction", methods=["GET", "POST"])
 def prediction():
     if request.method == "POST":
         try:
@@ -38,7 +42,7 @@ def prediction():
             predicted_price = round(prediction, 2)
             
             return render_template("prediction.html", 
-                                price=predicted_price,
+                                predicted_price=predicted_price,
                                 posted_by=posted_by,
                                 rera=rera,
                                 bhk=bhk,
@@ -47,7 +51,9 @@ def prediction():
 
         except Exception as e:
             return f"Something went wrong: {str(e)}"
-    return render_template("prediction.html", price=0)
+    
+    # GET request - show the form
+    return render_template("prediction.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
